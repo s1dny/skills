@@ -8,12 +8,22 @@ bun run travel map init /abs/trip-map          # copies the template and install
 bun run travel map build /abs/trip-map --title "Langkawi vs Krabi"   # → /abs/trip-map/map.html
 ```
 
-`places.json`, one group per option; a group's pins and routes share its colour:
+The template uses Roboto with Arial/sans-serif fallbacks, square corners, and a permanent right sidebar. Place details occupy its top; trip cards sit at its bottom. Each trip uses the next Vivid colour (cyan, orange, red, green, purple) across its translucent card background, map pins and driving routes. There is no palette picker, coloured dot, route list or pricing footer.
+
+Keep cards brief: country flag and country name, place and stay name, price, and one short description. Put detailed property notes and links in the place panel instead.
+
+`places.json`, one group per option:
 
 ```json
 [
   {
-    "name": "Langkawi · Maneh Villa · ≈$2,070 pp",
+    "name": "Langkawi · Maneh Villa",
+    "flag": "🇲🇾",
+    "country": "Malaysia",
+    "place": "Langkawi",
+    "stay": "Maneh Villa",
+    "price": "A$2,070 pp",
+    "description": "Private-pool villa close to the beach and restaurants.",
     "places": [
       { "kind": "airport", "name": "Langkawi International Airport", "placeId": "ChIJ…", "lat": 6.342, "lng": 99.731 },
       { "kind": "hotel", "name": "Maneh Villa Langkawi", "placeId": "ChIJ…", "lat": 6.282, "lng": 99.733 },
@@ -28,9 +38,12 @@ bun run travel map build /abs/trip-map --title "Langkawi vs Krabi"   # → /abs/
 ```
 
 - `kind` sets the pin glyph: airport, hotel, beach, hike, sight, market, food, cafe, bar.
-- `routes` are index pairs; each is listed under its group as "A → B: N min drive". Put comparison numbers in the group name, not on pins.
+- `price` is a short display string with currency and basis (for example `A$2,070 pp`); a number is formatted as AUD per person. Example prices above illustrate the schema, not a current quote. Report fetch date, stay dates and inclusions alongside the delivered file, without adding a footer to the map.
+- Clicking a trip card fits the map to its places.
+- `routes` are driving index pairs. Draw them in the trip colour without filling the cards with route timings.
+- Places with `placeId` open Google's place card. For a private rental without a Google place ID, omit `placeId` and supply an authored HTML `description` with a dated listing link; this opens in the same panel. Coordinates may be approximate and should be labelled in the description.
 - `?place=<placeId>` opens a card on load. Edit the folder's `map.ts`/`index.html` freely; `build` bundles them.
-- A route between places with no road between them (an island, a boat-only beach) shows "route failed".
+- Only route between road-accessible locations. For a hike, route to the trailhead; for a boat-only beach, route to its departure point. Route failures are logged in the browser console.
 
 ## Google Cloud
 

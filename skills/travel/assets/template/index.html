@@ -4,62 +4,124 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Trip map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       html,
       body {
         height: 100%;
         margin: 0;
         font:
-          14px system-ui,
+          14px Roboto,
+          Arial,
           sans-serif;
       }
       body {
         display: flex;
       }
-      #map {
+      *,
+      *::before,
+      *::after {
+        border-radius: 0 !important;
+      }
+      #map-panel {
         flex: 1;
+        min-width: 0;
+        position: relative;
+      }
+      #map {
+        position: absolute;
+        inset: 0;
+      }
+      #sidebar {
+        width: 400px;
+        max-width: 42%;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        background: #fff;
+        color: #111;
       }
       #card {
-        width: 400px;
+        flex: 1;
+        min-height: 0;
         overflow-y: auto;
-        display: none;
       }
-      #card.open {
-        display: block;
+      #trip-panel {
+        flex-shrink: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
       }
       #legend {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        z-index: 1;
-        background: #fff;
-        border-radius: 10px;
-        padding: 8px 12px;
-        box-shadow: 0 2px 8px #0004;
+        overflow-y: auto;
+        display: grid;
+        gap: 3px;
+        font-variant-numeric: tabular-nums;
       }
-      #legend div {
+      .trip {
+        appearance: none;
+        width: 100%;
+        border: 0;
         cursor: pointer;
-        padding: 3px 0;
+        padding: 11px 14px;
+        background: color-mix(in srgb, var(--trip-color) 84%, black 8%);
+        color: var(--trip-ink, #071411);
+        font: inherit;
+        text-align: left;
       }
-      #legend small {
+      .trip:hover {
+        background: var(--trip-color);
+      }
+      .trip:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -4px;
+      }
+      .trip-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .trip-country {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .trip-price {
+        font-size: 16px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .trip-price small {
+        font-size: 11px;
+        font-weight: 400;
+      }
+      .trip-place {
         display: block;
-        margin-left: 20px;
-        color: #555;
+        margin-top: 1px;
+        font-size: 15px;
+        font-weight: 700;
       }
-      #legend i {
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        margin-right: 8px;
-        vertical-align: -1px;
+      .trip-description {
+        display: block;
+        margin-top: 3px;
+        font-size: 12px;
+        line-height: 1.4;
       }
     </style>
   </head>
   <body>
-    <div id="map"></div>
-    <aside id="card"></aside>
-    <div id="legend"></div>
+    <main id="map-panel">
+      <div id="map"></div>
+    </main>
+    <aside id="sidebar">
+      <div id="card"></div>
+      <section id="trip-panel">
+        <div id="legend"></div>
+      </section>
+    </aside>
     <script type="module" src="./map.ts"></script>
   </body>
 </html>

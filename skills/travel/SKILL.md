@@ -17,7 +17,7 @@ Resolve this skill's real directory through symlinks. The repository root is two
    Then read the shortlist's beds, room types and pool (private or shared) with `hotels details --url <row url>` before recommending anything.
 4. **Around the hotel:** `places nearby --lat … --lng … --types cafe,restaurant` (or `market`, `tourist_attraction`, `hiking_area`, `beach`) ranks places by popularity with distance in km.
 5. **Map:** always deliver the map as one HTML file that opens from disk:
-   `map init <folder>`, write `<folder>/places.json`, then `map build <folder> --title "…"` writes `<folder>/map.html`.
+   `map init <folder>`, write `<folder>/places.json`, then `map build <folder> --title "…"` writes `<folder>/map.html`. Keep the template’s Roboto font, square corners, Vivid colours, and concise trip cards at the bottom of the right sidebar. Cards show the country flag/name, place/stay, price and a short description; keep detailed notes in the place panel.
 
 Report prices with the date they were fetched; they change daily. Commands exit non-zero on HTTP/RPC failures: those are errors, not empty results.
 

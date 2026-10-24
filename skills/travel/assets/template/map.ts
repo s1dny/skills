@@ -2,15 +2,39 @@
 import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
 import groups from "./places.json";
 
-// places.json: [{ name, color?, places: [{ kind, name, placeId, lat, lng }], routes?: [[fromIndex, toIndex]] }]
+// See references/map.md for the trip-card and place fields.
 type Group = {
   name: string;
-  color?: string;
-  places: { kind: string; name: string; placeId: string; lat: number; lng: number }[];
+  flag: string;
+  country: string;
+  place: string;
+  stay: string;
+  price: number | string;
+  description: string;
+  places: {
+    kind: string;
+    name: string;
+    placeId?: string;
+    lat: number;
+    lng: number;
+    description?: string;
+    url?: string;
+    note?: string;
+  }[];
   routes?: number[][];
 };
 
-const colors = ["#00acc1", "#fb8c00", "#e53935", "#43a047", "#1e88e5", "#8e24aa"];
+const colors = ["#00acc1", "#fb8c00", "#e53935", "#43a047", "#8e24aa"];
+function tripInk(color: string) {
+  const rgb = [1, 3, 5].map((offset) => parseInt(color.slice(offset, offset + 2), 16) * 0.84 + 255 * 0.08);
+  const linear = rgb.map((v) => {
+    const n = v / 255;
+    return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+  });
+  const luminance = linear[0]! * 0.2126 + linear[1]! * 0.7152 + linear[2]! * 0.0722;
+  return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) ? "#000" : "#fff";
+}
+
 const glyphs: Record<string, string> = {
   airport: "✈",
   hotel: "🏨",
@@ -22,6 +46,8 @@ const glyphs: Record<string, string> = {
   cafe: "☕",
   bar: "🍹",
 };
+const escapeHTML = (value: string) =>
+  value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
 const card = document.getElementById("card")!;
 const legend = document.getElementById("legend")!;
 // Replaced at build time by `travel map build`.
@@ -52,14 +78,15 @@ function showCard(placeId: string) {
   card.replaceChildren(details);
 }
 
-/** "Maneh Villa Langkawi - Private Pool" → "Maneh Villa Langkawi" for legend lines. */
-const short = (name: string) => name.split(/ [-~|·(]|,/)[0]!.trim();
-
 for (const [i, group] of (groups as Group[]).entries()) {
-  const color = group.color ?? colors[i % colors.length]!;
+  const color = colors[i % colors.length]!;
   const bounds = new LatLngBounds();
-  const row = document.createElement("div");
-  row.innerHTML = `<b><i style="background:${color}"></i>${group.name}</b>`;
+  const row = document.createElement("button");
+  row.type = "button";
+  row.className = "trip";
+  row.style.setProperty("--trip-color", color);
+  row.style.setProperty("--trip-ink", tripInk(color));
+  row.innerHTML = `<span class="trip-top"><span class="trip-country">${escapeHTML(group.flag)} ${escapeHTML(group.country)}</span><span class="trip-price">${typeof group.price === "number" ? `A$${group.price.toLocaleString("en-AU")} <small>pp</small>` : escapeHTML(group.price)}</span></span><span class="trip-place">${escapeHTML(group.place)} · ${escapeHTML(group.stay)}</span><span class="trip-description">${escapeHTML(group.description)}</span>`;
   row.onclick = () => map.fitBounds(bounds, 120);
   legend.append(row);
   for (const p of group.places) {
@@ -77,17 +104,18 @@ for (const [i, group] of (groups as Group[]).entries()) {
       content: pin as unknown as Node,
       gmpClickable: true,
     });
-    marker.addEventListener("gmp-click", () => showCard(p.placeId));
+    marker.addEventListener("gmp-click", () => {
+      if (p.description) {
+        card.classList.add("open");
+        card.innerHTML = `<div style="padding:24px;line-height:1.5"><button onclick="this.closest('#card').replaceChildren()">Close</button>${p.description}</div>`;
+      } else if (p.placeId) showCard(p.placeId);
+    });
     bounds.extend(position);
     all.extend(position);
   }
   for (const [from, to] of group.routes ?? []) {
     const a = group.places[from!]!,
       b = group.places[to!]!;
-    // One line per route, created in places.json order so labels never depend on which response arrives first.
-    const line = document.createElement("small");
-    line.textContent = `${short(a.name)} → ${short(b.name)}: …`;
-    row.append(line);
     Route.computeRoutes({
       origin: { lat: a.lat, lng: a.lng },
       destination: { lat: b.lat, lng: b.lng },
@@ -98,11 +126,8 @@ for (const [i, group] of (groups as Group[]).entries()) {
         const r = routes?.[0];
         if (!r?.path) throw new Error(`No route ${a.name} → ${b.name}`);
         new Polyline({ map, path: r.path, strokeColor: color, strokeWeight: 5, strokeOpacity: 0.9 });
-        const minutes = Math.round(Number(r.durationMillis) / 60000);
-        line.textContent = `${short(a.name)} → ${short(b.name)}: ${minutes} min drive`;
       },
       (e: unknown) => {
-        line.textContent = `${short(a.name)} → ${short(b.name)}: route failed`;
         console.error(group.name, e);
       },
     );
