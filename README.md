@@ -42,6 +42,16 @@ bun run travel map init /abs/trip-map && bun run travel map build /abs/trip-map
 
 [Skill](skills/travel/SKILL.md) · references: [flights](skills/travel/references/flights.md), [hotels](skills/travel/references/hotels.md), [places](skills/travel/references/places.md), [map](skills/travel/references/map.md)
 
+## Teach
+
+Socratic tutor, taught as Eliezer Yudkowsky. Short messages that end in one hard, open question, checked by a hidden student-critic before sending. You write your own notes in `~/repos/brain` and it reads and questions them every turn. No CLI.
+
+```sh
+/teach options in finance
+```
+
+[Skill](skills/teach/SKILL.md)
+
 ## YouTube
 
 Transcript, chapters and metadata for any YouTube video, from yt-dlp with a youtube-transcript-api fallback.
