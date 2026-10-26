@@ -277,3 +277,27 @@ describe("travel", () => {
     expect(html).toContain("ChIJ_aGbFMglUDARLBFvzo4Mc-M"); // places.json is inlined
   }, 180000);
 });
+
+describe("youtube", () => {
+  test("transcript follows the video's chapters", async () => {
+    const r = await run("run", "youtube", "transcript", "https://www.youtube.com/watch?v=nfTDljFG2g0");
+    expect(r.code).toBe(0);
+    const v = JSON.parse(r.out) as {
+      title: string;
+      source: string;
+      chapters: { start: string; title: string }[];
+      sections: { start: string; title?: string; text: string }[];
+    };
+    expect(v.title).toBe("Agent Harness for Learning Things");
+    expect(v.source).toMatch(/auto-captions \(en-orig\)|youtube-transcript-api/);
+    expect(v.chapters).toContainEqual({ start: "4:07", title: "Teaching" });
+    expect(v.sections.find((s) => s.title === "Goal")?.text).toMatch(/optimize learning/i);
+    expect(v.sections.map((s) => s.text).join(" ").length).toBeGreaterThan(15000);
+  }, 60000);
+
+  test("unknown language fails loudly", async () => {
+    const r = await run("run", "youtube", "transcript", "nfTDljFG2g0", "--lang", "xx");
+    expect(r.code).not.toBe(0);
+    expect(r.err).toMatch(/no xx transcript/);
+  }, 60000);
+});

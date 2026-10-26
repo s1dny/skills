@@ -13,7 +13,8 @@
     "skills:install": "bun scripts/install.ts",
     "format": "bun fmt",
     "format:check": "bun fmt --check",
-    "travel": "bun src/travel/cli.ts"
+    "travel": "bun src/travel/cli.ts",
+    "youtube": "bun src/youtube/cli.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",

@@ -42,6 +42,16 @@ bun run travel map init /abs/trip-map && bun run travel map build /abs/trip-map
 
 [Skill](skills/travel/SKILL.md) · references: [flights](skills/travel/references/flights.md), [hotels](skills/travel/references/hotels.md), [places](skills/travel/references/places.md), [map](skills/travel/references/map.md)
 
+## YouTube
+
+Transcript, chapters and metadata for any YouTube video, from yt-dlp with a youtube-transcript-api fallback.
+
+```sh
+bun run youtube transcript 'https://www.youtube.com/watch?v=nfTDljFG2g0'
+```
+
+[Skill](skills/youtube/SKILL.md) · [API reference](skills/youtube/references/api.md)
+
 ## Development
 
 Each skill has `skills/<name>/SKILL.md`, `skills/<name>/references/api.md` and `src/<name>/cli.ts`. Add its command to `package.json`; the installer discovers skill directories automatically.
