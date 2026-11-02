@@ -1,0 +1,152 @@
+{
+  "title": "Phuket & Langkawi",
+  "subtitle": "2 adults",
+  "days": [
+    {
+      "date": "2026-12-01",
+      "place": "Kata",
+      "country": "TH",
+      "items": [
+        {
+          "id": "outbound",
+          "kind": "flight",
+          "name": "Sydney → Phuket",
+          "time": "10:05",
+          "detail": "JQ27 · arrives 16:00",
+          "booking": "booked",
+          "from": {
+            "name": "Sydney Airport",
+            "placeId": "ChIJ24MzG_GwEmsRd2VLWl01368",
+            "lat": -33.950033,
+            "lng": 151.1816955,
+            "country": "AU"
+          },
+          "to": {
+            "name": "Phuket International Airport",
+            "placeId": "ChIJCQ93jJhIUDAR0DDUaWtBtOU",
+            "lat": 8.1053402,
+            "lng": 98.305429
+          }
+        },
+        {
+          "kind": "drive",
+          "name": "Airport → Kata",
+          "detail": "Grab, about 1 hr",
+          "from": {
+            "name": "Phuket International Airport",
+            "placeId": "ChIJCQ93jJhIUDAR0DDUaWtBtOU",
+            "lat": 8.1053402,
+            "lng": 98.305429
+          },
+          "to": { "name": "Kata Beach", "placeId": "ChIJAdUTdI0lUDAR-EN1U6iZIY0", "lat": 7.8206945, "lng": 98.2976473 }
+        },
+        {
+          "kind": "stay",
+          "name": "Kata Beach",
+          "detail": "2 nights",
+          "booking": "to book",
+          "places": [
+            { "name": "Kata Beach", "placeId": "ChIJAdUTdI0lUDAR-EN1U6iZIY0", "lat": 7.8206945, "lng": 98.2976473 }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-12-02",
+      "place": "Kata",
+      "country": "TH",
+      "items": [
+        {
+          "id": "big-buddha",
+          "kind": "sight",
+          "name": "Big Buddha",
+          "places": [
+            {
+              "name": "Phuket Big Buddha",
+              "placeId": "ChIJOSmXz2AvUDARXCxlBBs7y38",
+              "lat": 7.8275763,
+              "lng": 98.3128423
+            }
+          ]
+        },
+        {
+          "kind": "market",
+          "name": "Old Phuket Town",
+          "suggest": true,
+          "replaces": "big-buddha",
+          "why": "Sino-Portuguese shophouses, cafes and the Sunday walking market fill a whole afternoon.",
+          "places": [
+            { "name": "Old Phuket Town", "placeId": "ChIJyXu3hvoxUDAR86GPJxPu9G8", "lat": 7.8858652, "lng": 98.3876197 }
+          ]
+        },
+        {
+          "kind": "sight",
+          "name": "Promthep Cape",
+          "suggest": true,
+          "choice": "Sunset",
+          "why": "The island's classic sunset point; arrive early for a spot.",
+          "places": [
+            { "name": "Promthep Cape", "placeId": "ChIJtZgCJiEmUDARG1q53LLQaAs", "lat": 7.7618264, "lng": 98.3053487 }
+          ]
+        },
+        {
+          "kind": "sight",
+          "name": "Karon Viewpoint",
+          "suggest": true,
+          "choice": "Sunset",
+          "why": "Quieter, with three bays in one view, 10 minutes from Kata.",
+          "places": [
+            { "name": "Karon Viewpoint", "placeId": "ChIJdRDx6fslUDARr6N6xhGdgyg", "lat": 7.7973175, "lng": 98.3021487 }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-12-03",
+      "place": "Langkawi",
+      "country": "MY",
+      "items": [
+        {
+          "kind": "flight",
+          "name": "Phuket → Langkawi",
+          "detail": "via Kuala Lumpur",
+          "booking": "to book",
+          "from": {
+            "name": "Phuket International Airport",
+            "placeId": "ChIJCQ93jJhIUDAR0DDUaWtBtOU",
+            "lat": 8.1053402,
+            "lng": 98.305429,
+            "country": "TH"
+          },
+          "to": {
+            "name": "Langkawi International Airport",
+            "placeId": "ChIJYUtZgiN4TDARtnk2wHq0-eU",
+            "lat": 6.3423662,
+            "lng": 99.7311151
+          }
+        },
+        {
+          "kind": "beach",
+          "name": "Pantai Cenang",
+          "places": [
+            { "name": "Pantai Cenang", "placeId": "ChIJG4L3oguISzARA2GH9QhW8MM", "lat": 6.2955916, "lng": 99.7228132 }
+          ]
+        },
+        {
+          "kind": "sight",
+          "name": "SkyCab & Sky Bridge",
+          "suggest": true,
+          "why": "Cable car to the curved bridge above the rainforest; go at opening to beat the queue.",
+          "places": [
+            {
+              "name": "Langkawi Skybridge Cable Car",
+              "placeId": "ChIJAd9TL-F2TDARfrojfQscVeI",
+              "lat": 6.3710883,
+              "lng": 99.6716785
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

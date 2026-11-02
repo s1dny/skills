@@ -274,7 +274,7 @@ describe("travel", () => {
     const html = await Bun.file(out).text();
     expect(html).not.toMatch(/src="\.\/map\.ts"|\/api\/key|localhost/);
     expect(html).toContain("<title>e2e</title>");
-    expect(html).toContain("ChIJ_aGbFMglUDARLBFvzo4Mc-M"); // places.json is inlined
+    expect(html).toContain("ChIJ24MzG_GwEmsRd2VLWl01368"); // trip.json is inlined
   }, 180000);
 });
 

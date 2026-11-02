@@ -3,7 +3,7 @@ import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { key } from "./google.ts";
 
-export const help = `  bun run travel map init <folder>     # copy the satellite map template and install it; then edit <folder>/places.json
+export const help = `  bun run travel map init <folder>     # copy the satellite map template and install it; then write <folder>/trip.json
   bun run travel map build <folder> [--title "Langkawi vs Krabi"] [--out <file.html>]   # single self-contained HTML (default <folder>/map.html)`;
 
 const sh = async (cmd: string[], cwd: string) => {
@@ -17,10 +17,10 @@ async function init(folder: string) {
   const template = new URL("../../skills/travel/assets/template/", import.meta.url).pathname;
   await cp(template, target, { recursive: true, filter: (p) => !p.includes("node_modules") });
   await sh(["bun", "install"], target);
-  return { path: target, edit: join(target, "places.json"), next: `bun run travel map build ${target}` };
+  return { path: target, edit: join(target, "trip.json"), next: `bun run travel map build ${target}` };
 }
 
-/** Bundles map.ts with places.json and the browser Maps key into one HTML file that opens straight from disk. */
+/** Bundles map.ts with trip.json and the browser Maps key into one HTML file that opens straight from disk. */
 async function build(folder: string, args: string[]) {
   const { values } = parseArgs({ args, options: { title: { type: "string" }, out: { type: "string" } }, strict: true });
   if (!key) throw new Error("GOOGLE_MAPS_API_KEY is not set (repository .env)");

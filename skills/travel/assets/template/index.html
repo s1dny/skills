@@ -6,24 +6,50 @@
     <title>Trip map</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      /* Google Maps side-panel look: Google Sans, #1f1f1f text, #e8eaed dividers, 8px chips, MD3 elevation. */
+      :root {
+        --ink: #1f1f1f;
+        --muted: #5e5e5e;
+        --line: #e8eaed;
+        --hover: #f1f3f4;
+        --blue: #0b57d0;
+        --sans: "Google Sans", Roboto, Arial, sans-serif;
+        --text: "Google Sans Text", Roboto, Arial, sans-serif;
+        --replace: #d93025;
+      }
       html,
       body {
         height: 100%;
         margin: 0;
-        font:
-          14px Roboto,
-          Arial,
-          sans-serif;
+        font: 14px/20px var(--text);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
       }
       body {
         display: flex;
       }
-      *,
-      *::before,
-      *::after {
-        border-radius: 0 !important;
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      aside {
+        width: 408px;
+        max-width: 40vw;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        background: #fff;
+        position: relative;
+        z-index: 1;
+        box-shadow:
+          0 1px 2px rgba(60, 64, 67, 0.3),
+          0 2px 6px 2px rgba(60, 64, 67, 0.15);
       }
       #map-panel {
         flex: 1;
@@ -34,93 +60,391 @@
         position: absolute;
         inset: 0;
       }
-      #sidebar {
-        width: 400px;
-        max-width: 42%;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-        background: #fff;
-        color: #111;
+
+      /* Left: trip timeline */
+      #place {
+        width: 33.333vw;
+        max-width: none;
       }
-      #card {
+      #trip-head {
+        padding: 20px 24px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      #title {
+        margin: 0;
+        font: 400 22px/28px var(--sans);
+      }
+      #subtitle {
+        margin-top: 2px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid #747775;
+        border-radius: 8px;
+        background: #fff;
+        color: #444746;
+        font: 500 14px/20px var(--text);
+        cursor: pointer;
+      }
+      .chip:hover {
+        background: var(--hover);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .key {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+      }
+      #timeline {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-bottom: 24px;
+      }
+      .day-head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px 24px 8px;
+        border: 0;
+        border-top: 1px solid var(--line);
+        background: #fff;
+        text-align: left;
+        cursor: pointer;
+      }
+      .day:first-child .day-head {
+        border-top: 0;
+      }
+      .day-head:hover {
+        background: #f8fafd;
+      }
+      .day-when {
+        font: 500 16px/24px var(--sans);
+      }
+      .day-n {
+        display: block;
+        color: var(--muted);
+        font: 400 12px/16px var(--text);
+      }
+      .day-where {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--c) 14%, white);
+        color: color-mix(in srgb, var(--c) 60%, black);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .items {
+        position: relative;
+        padding: 0 16px 8px;
+      }
+      /* The rail behind the step icons, like Google's directions steps. */
+      .items::before {
+        content: "";
+        position: absolute;
+        left: 37px;
+        top: 0;
+        bottom: 12px;
+        width: 2px;
+        background: var(--line);
+      }
+      .item {
+        position: relative;
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        gap: 0 4px;
+        padding: 8px 8px 8px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        outline: none;
+        scroll-margin-top: 72px;
+      }
+      .item:hover {
+        background: var(--hover);
+      }
+      .item.active {
+        background: #e8f0fe;
+      }
+      .item:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--blue);
+      }
+      .icon {
+        position: relative;
+        justify-self: center;
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid var(--c);
+        font-size: 14px;
+        line-height: 1;
+      }
+      .move .icon {
+        background: var(--c);
+      }
+      .body {
+        min-width: 0;
+      }
+      .line1 {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .name {
+        font-weight: 500;
+      }
+      .price {
+        color: var(--muted);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .detail,
+      .why {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 18px;
+      }
+      .why {
+        color: #444746;
+        margin-top: 2px;
+      }
+      .badges:not(:empty) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 6px;
+        font: 500 12px/16px var(--text);
+        white-space: nowrap;
+      }
+      .badge.booked {
+        background: #d3e3fd;
+        color: #041e49;
+      }
+      .badge.to-book {
+        background: #fef7e0;
+        color: #8a5300;
+        box-shadow: inset 0 0 0 1px #f9ab00;
+      }
+      .badge.replace {
+        background: #fce8e6;
+        color: #a50e0e;
+      }
+      .badge.choice {
+        background: #f3e8fd;
+        color: #681da8;
+      }
+      .subplaces {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .mini-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 26px;
+        padding: 0 10px 0 8px;
+        border: 1px solid #c4c7c5;
+        border-radius: 6px;
+        background: #fff;
+        color: #444746;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .mini-chip:hover {
+        background: var(--hover);
+      }
+
+      /* AI suggestions: Gemini-style glowing gradient outline. Planned items stay plain white. */
+      .item.suggestion,
+      .badge.ai {
+        border: 1.5px solid transparent;
+        background:
+          linear-gradient(#f8fbff, #f8fbff) padding-box,
+          linear-gradient(120deg, #4285f4, #4796e3 40%, #8ab4f8 70%, #9177c7) border-box;
+        box-shadow:
+          0 0 10px rgba(66, 133, 244, 0.28),
+          0 0 2px rgba(66, 133, 244, 0.4);
+      }
+      .item.suggestion {
+        margin: 6px 0;
+      }
+      .item.suggestion:hover {
+        background:
+          linear-gradient(#eef4ff, #eef4ff) padding-box,
+          linear-gradient(120deg, #4285f4, #4796e3 40%, #8ab4f8 70%, #9177c7) border-box;
+      }
+      .badge.ai {
+        color: #0b57d0;
+        box-shadow: 0 0 6px rgba(66, 133, 244, 0.3);
+      }
+      .item.suggestion .icon {
+        border-style: dashed;
+      }
+      .replaced-item .name,
+      .replaced-item .detail {
+        text-decoration: line-through;
+        text-decoration-color: var(--replace);
+      }
+      .replaced-item {
+        opacity: 0.6;
+      }
+      .options-head {
+        padding: 4px 24px 2px 60px;
+        color: #0b57d0;
+        font: 500 13px/20px var(--text);
+      }
+      .options {
+        padding: 0 16px 12px;
+      }
+      .item.suggestion {
+        grid-template-columns: 44px 1fr 36px;
+      }
+      .pick {
+        align-self: start;
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        margin-top: 2px;
+        padding: 0;
+        border: 1px solid #747775;
+        border-radius: 50%;
+        background: #fff;
+        fill: #0b57d0;
+        cursor: pointer;
+      }
+      .pick:hover {
+        background: #e8f0fe;
+      }
+      .pick.on {
+        border-color: #0b57d0;
+        background: #0b57d0;
+        fill: #fff;
+      }
+      .pick.on:hover {
+        background: #0842a0;
+      }
+      /* A picked option sits in the plan; it keeps a fainter glow so it still reads as the AI's idea. */
+      .item.suggestion.picked {
+        box-shadow: 0 0 4px rgba(66, 133, 244, 0.25);
+      }
+      .item.passed {
+        opacity: 0.45;
+      }
+      .plane {
+        transform: translateY(50%);
+      }
+      .plane span {
+        display: block;
+        font-size: 22px;
+        line-height: 1;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+      }
+      /* Right: Google's place card, opened from a pin or timeline row */
+      #place[hidden] {
+        display: none;
+      }
+      #place-bar {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px;
+      }
+      #place-close {
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        fill: #444746;
+        cursor: pointer;
+      }
+      #place-close:hover {
+        background: var(--hover);
+      }
+      #place-body {
         flex: 1;
         min-height: 0;
         overflow-y: auto;
       }
-      #trip-panel {
-        flex-shrink: 1;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
+      .authored {
+        padding: 0 24px 24px;
+        line-height: 1.5;
       }
-      #legend {
-        overflow-y: auto;
-        display: grid;
-        gap: 3px;
-        font-variant-numeric: tabular-nums;
-      }
-      .trip {
-        appearance: none;
-        width: 100%;
-        border: 0;
-        cursor: pointer;
-        padding: 11px 14px;
-        background: color-mix(in srgb, var(--trip-color) 84%, black 8%);
-        color: var(--trip-ink, #071411);
-        font: inherit;
-        text-align: left;
-      }
-      .trip:hover {
-        background: var(--trip-color);
-      }
-      .trip:focus-visible {
-        outline: 2px solid currentColor;
-        outline-offset: -4px;
-      }
-      .trip-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 10px;
-      }
-      .trip-country {
-        font-size: 12px;
-        font-weight: 600;
-      }
-      .trip-price {
-        font-size: 16px;
-        font-weight: 700;
-        white-space: nowrap;
-      }
-      .trip-price small {
-        font-size: 11px;
-        font-weight: 400;
-      }
-      .trip-place {
-        display: block;
-        margin-top: 1px;
-        font-size: 15px;
-        font-weight: 700;
-      }
-      .trip-description {
-        display: block;
-        margin-top: 3px;
-        font-size: 12px;
-        line-height: 1.4;
+      .authored h2 {
+        margin: 0 0 8px;
+        font: 400 22px/28px var(--sans);
       }
     </style>
   </head>
   <body>
+    <aside id="trip">
+      <header id="trip-head">
+        <h1 id="title"></h1>
+        <div id="subtitle"></div>
+        <div class="chips" id="countries"></div>
+        <div class="key">
+          <span class="badge ai">✨ AI option · + to add</span>
+          <span class="badge booked">🎟️ Booked</span>
+          <span class="badge to-book">📝 To book</span>
+          <span class="badge replace">🔁 Instead of</span>
+          <span class="badge choice">🔀 Pick one</span>
+        </div>
+      </header>
+      <div id="timeline"></div>
+    </aside>
     <main id="map-panel">
       <div id="map"></div>
     </main>
-    <aside id="sidebar">
-      <div id="card"></div>
-      <section id="trip-panel">
-        <div id="legend"></div>
-      </section>
+    <aside id="place" hidden>
+      <div id="place-bar">
+        <button id="place-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6z" />
+          </svg>
+        </button>
+      </div>
+      <div id="place-body"></div>
     </aside>
     <script type="module" src="./map.ts"></script>
   </body>
