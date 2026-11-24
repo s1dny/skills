@@ -9,11 +9,16 @@ for (const entry of await readdir(join(root, "skills"), { withFileTypes: true })
     names.push(entry.name);
 }
 const backups = join(homedir(), ".local", "state", "skills", "backups");
-const bases = [
+const claudeProfiles = (await readdir(homedir(), { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory() && /^\.claude(-.+)?$/.test(entry.name))
+  .map((entry) => join(homedir(), entry.name, "skills"));
+const bases = new Set([
   join(homedir(), "skills"),
   join(process.env.CODEX_HOME ?? join(homedir(), ".codex"), "skills"),
   join(homedir(), ".claude", "skills"),
-];
+  join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), "skills"),
+  ...claudeProfiles,
+]);
 for (const base of bases) {
   await mkdir(base, { recursive: true });
   for (const name of names) {
