@@ -1,6 +1,6 @@
 ---
 name: travel
-description: Trip and holiday research. Google Flights date grids and itineraries, hotel, villa and home search across Google Hotels, Airbnb, Agoda and cozycozy, Google Maps place search and nearby search (cafes, food, markets, sights), and a satellite trip map delivered as one HTML file: a Google Maps-style day-by-day timeline of countries, flights and stays, AI options to pick from, and Google place cards. Use for any flight, hotel, destination, itinerary or "where should we go" question.
+description: Trip and holiday research. Google Flights date grids and itineraries, hotel, villa and home search across Google Hotels, Airbnb, Agoda and cozycozy, Google Maps place search and nearby search (cafes, food, markets, sights), and a satellite trip map delivered as one HTML file with a Google Maps-style day-by-day timeline of countries, flights and stays, AI options to pick from, and Google place cards. Use for any flight, hotel, destination, itinerary or "where should we go" question.
 ---
 
 Resolve this skill's real directory through symlinks. The repository root is two directories above it. Run commands from the root; they print JSON. `bun run travel help` lists every command and flag.
