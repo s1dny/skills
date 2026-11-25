@@ -19,7 +19,7 @@ Commands return JSON data except for `help`. The read-only `sql` command also ac
 ## Finding venues and deals
 
 - Use the supplied coordinates or geocode the named place. The `walk` command replaces `walk_times` for that origin. It estimates walking time on OpenStreetMap paths at 4.8 km/h, excluding waits at crossings.
-- For today, run `live` with the shortlisted venue slugs. Check `live_deals.date`, `fetched_at`, `qty_left` (0 means sold out), and the offer terms. This table can include one-off deals absent from the weekly schedule. If the refresh returns no rows, check the current EatClub venue listing and label app availability as unverified.
+- For today, run `live` with the shortlisted venue slugs. Check `live_deals.date`, `fetched_at`, `qty_left` (0 means sold out), and the offer terms. This table can include one-off deals absent from the weekly schedule. If the refresh fails or returns no rows, check the current EatClub venue listing and label app availability as unverified. A failed refresh preserves previously cached live rows.
 - Use `deals` for weekly schedules and `hours` to check opening and kitchen hours, including split shifts. Check the deal type, menu availability, and `discount_exclusions` before calculating a discounted price. Add any mandatory menu charges.
 - Use the venue's local timezone. SQL schedule times are minutes after midnight and `day` uses ISO weekdays (Monday = 1). Get Sydney's current weekday and time with `TZ=Australia/Sydney date '+%u %H:%M'`. **Use 24-hour time in user-facing answers**, including offer windows such as `17:00–18:30`.
 - Use `venues.app_link` to open a venue in the app and `venues.url` for the public listing.

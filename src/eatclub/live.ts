@@ -41,7 +41,7 @@ export async function refreshLive(db: Client, slugs?: string[]): Promise<void> {
     const rows = scope ? all.filter((r) => scope.has(String(r.slug))) : all;
 
     await mapLimit(rows, 12, async (r) => {
-      const d = await liveDeal(String(r.deal_id)).catch(() => null);
+      const d = await liveDeal(String(r.deal_id));
       if (!d) return;
       deals++;
       statements.push({
@@ -79,7 +79,7 @@ export async function refreshLive(db: Client, slugs?: string[]): Promise<void> {
       ...new Map(rows.filter((r) => r.excluded_item_count !== 0).map((r) => [String(r.slug), r])).values(),
     ];
     await mapLimit(withDeals, 12, async (r) => {
-      const raw = await excludedItems(String(r.venue_id), date).catch(() => null);
+      const raw = await excludedItems(String(r.venue_id), date);
       const parsed = raw ? (JSON.parse(raw) as { categories?: Record<string, unknown>[] }) : null;
       if (!parsed?.categories?.length) return;
       venues++;
@@ -112,13 +112,19 @@ if (import.meta.main) {
     process.exit(2);
   }
   const db = open();
-  await refreshLive(db, slugs);
-  const placeholders = slugs.map(() => "?").join(",");
-  const deals = await db.execute({ sql: `SELECT * FROM live_deals WHERE slug IN (${placeholders})`, args: slugs });
-  const exclusions = await db.execute({
-    sql: `SELECT * FROM discount_exclusions WHERE slug IN (${placeholders})`,
-    args: slugs,
-  });
-  console.log(JSON.stringify({ slugs, deals: deals.rows, exclusions: exclusions.rows }));
-  db.close();
+  try {
+    await refreshLive(db, slugs);
+    const placeholders = slugs.map(() => "?").join(",");
+    const deals = await db.execute({ sql: `SELECT * FROM live_deals WHERE slug IN (${placeholders})`, args: slugs });
+    const exclusions = await db.execute({
+      sql: `SELECT * FROM discount_exclusions WHERE slug IN (${placeholders})`,
+      args: slugs,
+    });
+    console.log(JSON.stringify({ slugs, deals: deals.rows, exclusions: exclusions.rows }));
+  } catch (error) {
+    console.error(`EatClub live refresh failed: ${error instanceof Error ? error.message : String(error)}`);
+    process.exitCode = 1;
+  } finally {
+    db.close();
+  }
 }

@@ -297,7 +297,7 @@ await db.batch(
   "write",
 );
 log(`static: ${listed.length} venues (${failed} without deals/menus)`);
-await refreshLive(db);
+await refreshLive(db).catch((error) => log(`live refresh failed: ${error}`));
 const meta = await db.execute("SELECT key, value FROM meta");
 db.close();
 await rename(tmp, DB_PATH);
