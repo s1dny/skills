@@ -25,7 +25,7 @@ bun run eatclub live bar-bruno
 
 `sync` refreshes the database. `map` builds the local walking graph. Data is stored in `data/eatclub.db` and `data/walk-graph.bin`.
 
-[Skill](skills/eatclub/SKILL.md) · [API reference](skills/eatclub/references/api.md)
+[Skill](skills/eatclub/SKILL.md) · [API reference](skills/eatclub/SKILL.md#schema)
 
 ## Travel
 
@@ -64,7 +64,7 @@ bun run youtube transcript 'https://www.youtube.com/watch?v=nfTDljFG2g0'
 
 ## Development
 
-Each skill has `skills/<name>/SKILL.md`, `skills/<name>/references/api.md` and `src/<name>/cli.ts`. Add its command to `package.json`; the installer discovers skill directories automatically.
+Each skill has a `skills/<name>/SKILL.md` and can include reference files. For skills with a CLI, put the entry point at `src/<name>/cli.ts` and add its command to `package.json`. The installer discovers skill directories automatically.
 
 ```sh
 bun run lint
