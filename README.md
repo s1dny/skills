@@ -60,7 +60,7 @@ Transcript, chapters and metadata for any YouTube video, from yt-dlp with a yout
 bun run youtube transcript 'https://www.youtube.com/watch?v=nfTDljFG2g0'
 ```
 
-[Skill](skills/youtube/SKILL.md) · [API reference](skills/youtube/references/api.md)
+[Skill](skills/youtube/SKILL.md)
 
 ## Development
 
