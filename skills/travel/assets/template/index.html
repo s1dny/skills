@@ -20,12 +20,13 @@
         --blue: #0b57d0;
         --sans: "Google Sans", Roboto, Arial, sans-serif;
         --text: "Google Sans Text", Roboto, Arial, sans-serif;
-        --replace: #d93025;
       }
       html,
       body {
         height: 100%;
         margin: 0;
+        overflow: clip;
+        overscroll-behavior: none;
         font: 14px/20px var(--text);
         color: var(--ink);
         -webkit-font-smoothing: antialiased;
@@ -66,56 +67,11 @@
         width: 33.333vw;
         max-width: none;
       }
-      #trip-head {
-        padding: 20px 24px 12px;
-        border-bottom: 1px solid var(--line);
-      }
-      #title {
-        margin: 0;
-        font: 400 22px/28px var(--sans);
-      }
-      #subtitle {
-        margin-top: 2px;
-        color: var(--muted);
-        font-variant-numeric: tabular-nums;
-      }
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        height: 32px;
-        padding: 0 12px;
-        border: 1px solid #747775;
-        border-radius: 8px;
-        background: #fff;
-        color: #444746;
-        font: 500 14px/20px var(--text);
-        cursor: pointer;
-      }
-      .chip:hover {
-        background: var(--hover);
-      }
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-      }
-      .key {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 12px;
-      }
       #timeline {
         flex: 1;
         min-height: 0;
         overflow-y: auto;
+        overscroll-behavior-y: contain;
         padding-bottom: 24px;
       }
       .day-head {
@@ -123,11 +79,12 @@
         top: 0;
         z-index: 2;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 6px 10px;
         width: 100%;
-        padding: 12px 24px 8px;
+        padding: 12px 16px;
         border: 0;
         border-top: 1px solid var(--line);
         background: #fff;
@@ -141,37 +98,46 @@
         background: #f8fafd;
       }
       .day-when {
+        flex-shrink: 0;
+        max-width: 100%;
         font: 500 16px/24px var(--sans);
       }
-      .day-n {
-        display: block;
+      .day-locations {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        max-width: 100%;
+        margin-left: auto;
+        overflow-x: auto;
+      }
+      .day-location {
+        display: inline-flex;
+        align-items: center;
+        flex: none;
+        gap: 4px;
+      }
+      .day-route-arrow {
         color: var(--muted);
-        font: 400 12px/16px var(--text);
       }
       .day-where {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 2px 10px;
+        gap: 4px;
+        padding: 2px 7px;
         border-radius: 999px;
         background: color-mix(in srgb, var(--c) 14%, white);
         color: color-mix(in srgb, var(--c) 60%, black);
         font-weight: 500;
+        font-size: 13px;
         white-space: nowrap;
       }
-      .items {
-        position: relative;
-        padding: 0 16px 8px;
+      @media (max-width: 760px) {
+        .day-head {
+          padding-inline: 12px;
+        }
       }
-      /* The rail behind the step icons, like Google's directions steps. */
-      .items::before {
-        content: "";
-        position: absolute;
-        left: 37px;
-        top: 0;
-        bottom: 12px;
-        width: 2px;
-        background: var(--line);
+      .items {
+        padding: 0 16px 8px;
       }
       .item {
         position: relative;
@@ -200,14 +166,8 @@
         place-items: center;
         width: 28px;
         height: 28px;
-        border-radius: 50%;
-        background: #fff;
-        border: 2px solid var(--c);
-        font-size: 14px;
+        font-size: 22px;
         line-height: 1;
-      }
-      .move .icon {
-        background: var(--c);
       }
       .body {
         min-width: 0;
@@ -225,114 +185,28 @@
         white-space: nowrap;
         font-variant-numeric: tabular-nums;
       }
-      .detail,
-      .why {
+      .detail {
         display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         color: var(--muted);
         font-size: 13px;
         line-height: 18px;
       }
-      .why {
-        color: #444746;
-        margin-top: 2px;
-      }
-      .badges:not(:empty) {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 6px;
-      }
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        height: 22px;
-        padding: 0 8px;
-        border-radius: 6px;
-        font: 500 12px/16px var(--text);
-        white-space: nowrap;
-      }
-      .badge.booked {
-        background: #d3e3fd;
-        color: #041e49;
-      }
-      .badge.to-book {
-        background: #fef7e0;
-        color: #8a5300;
-        box-shadow: inset 0 0 0 1px #f9ab00;
-      }
-      .badge.replace {
-        background: #fce8e6;
-        color: #a50e0e;
-      }
-      .badge.choice {
-        background: #f3e8fd;
-        color: #681da8;
-      }
-      .subplaces {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 6px;
-      }
-      .mini-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        height: 26px;
-        padding: 0 10px 0 8px;
-        border: 1px solid #c4c7c5;
-        border-radius: 6px;
-        background: #fff;
-        color: #444746;
-        font-size: 12px;
-        cursor: pointer;
-      }
-      .mini-chip:hover {
-        background: var(--hover);
-      }
-
-      /* AI suggestions: Gemini-style glowing gradient outline. Planned items stay plain white. */
-      .item.suggestion,
-      .badge.ai {
-        border: 1.5px solid transparent;
-        background:
-          linear-gradient(#f8fbff, #f8fbff) padding-box,
-          linear-gradient(120deg, #4285f4, #4796e3 40%, #8ab4f8 70%, #9177c7) border-box;
-        box-shadow:
-          0 0 10px rgba(66, 133, 244, 0.28),
-          0 0 2px rgba(66, 133, 244, 0.4);
-      }
       .item.suggestion {
         margin: 6px 0;
       }
-      .item.suggestion:hover {
-        background:
-          linear-gradient(#eef4ff, #eef4ff) padding-box,
-          linear-gradient(120deg, #4285f4, #4796e3 40%, #8ab4f8 70%, #9177c7) border-box;
-      }
-      .badge.ai {
-        color: #0b57d0;
-        box-shadow: 0 0 6px rgba(66, 133, 244, 0.3);
-      }
-      .item.suggestion .icon {
-        border-style: dashed;
-      }
-      .replaced-item .name,
-      .replaced-item .detail {
-        text-decoration: line-through;
-        text-decoration-color: var(--replace);
-      }
-      .replaced-item {
-        opacity: 0.6;
-      }
-      .options-head {
-        padding: 4px 24px 2px 60px;
-        color: #0b57d0;
-        font: 500 13px/20px var(--text);
-      }
       .options {
         padding: 0 16px 12px;
+      }
+      .items:not(:empty) + .options:not(:empty) {
+        padding-top: 18px;
+      }
+      .choice-heading {
+        margin: 12px 0 6px 12px;
+        color: #681da8;
+        font: 500 14px/20px var(--sans);
       }
       .item.suggestion {
         grid-template-columns: 44px 1fr 36px;
@@ -345,9 +219,9 @@
         height: 32px;
         margin-top: 2px;
         padding: 0;
-        border: 1px solid #747775;
+        border: 0;
         border-radius: 50%;
-        background: #fff;
+        background: transparent;
         fill: #0b57d0;
         cursor: pointer;
       }
@@ -355,19 +229,48 @@
         background: #e8f0fe;
       }
       .pick.on {
-        border-color: #0b57d0;
         background: #0b57d0;
         fill: #fff;
       }
       .pick.on:hover {
         background: #0842a0;
       }
-      /* A picked option sits in the plan; it keeps a fainter glow so it still reads as the AI's idea. */
-      .item.suggestion.picked {
-        box-shadow: 0 0 4px rgba(66, 133, 244, 0.25);
-      }
       .item.passed {
         opacity: 0.45;
+      }
+      .map-pin {
+        position: relative;
+        width: 26px;
+        height: 31px;
+        filter: drop-shadow(0 1px 1px #0005);
+        transform-origin: center bottom;
+      }
+      .map-pin::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        bottom: 3px;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 2px;
+        transform: rotate(45deg);
+      }
+      .map-pin-glyph {
+        position: relative;
+        display: grid;
+        place-items: center;
+        box-sizing: border-box;
+        width: 26px;
+        height: 26px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background: var(--pin-fill);
+        font-size: 14px;
+        line-height: 1;
+      }
+      .map-pin.selected {
+        scale: 1.24;
       }
       .plane {
         transform: translateY(50%);
@@ -376,23 +279,36 @@
         display: block;
         font-size: 22px;
         line-height: 1;
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+        filter: drop-shadow(0 1px 1px #0005);
+      }
+      .map-overview .map-pin,
+      .map-overview .plane span {
+        scale: 0.72;
+        filter: drop-shadow(0 1px 1px #0003);
+      }
+      .map-overview .map-pin.selected {
+        scale: 1;
       }
       /* Right: Google's place card, opened from a pin or timeline row */
       #place[hidden] {
-        display: none;
+        display: flex;
+        position: fixed;
+        inset: 0 0 0 auto;
+        visibility: hidden;
+        pointer-events: none;
       }
       #place-bar {
-        display: flex;
-        justify-content: flex-end;
-        padding: 8px;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 1;
       }
       #place-close {
         width: 40px;
         height: 40px;
         border: 0;
         border-radius: 50%;
-        background: transparent;
+        background: #fff;
         display: grid;
         place-items: center;
         padding: 0;
@@ -403,9 +319,30 @@
         background: var(--hover);
       }
       #place-body {
+        position: relative;
         flex: 1;
         min-height: 0;
         overflow-y: auto;
+        overscroll-behavior-y: contain;
+        padding-top: 8px;
+      }
+      gmp-place-details {
+        border: 0;
+        border-radius: 0;
+      }
+      .place-card-ready:not(.place-card-inactive) {
+        /* The Google widget renders its 50px header inside a closed shadow root. */
+        --place-header-height: 50px;
+        display: block;
+        margin-top: calc(-1 * var(--place-header-height));
+        clip-path: inset(var(--place-header-height) 0 0);
+      }
+      .place-card-inactive {
+        position: fixed;
+        inset: 0 0 auto auto;
+        width: 33.333vw;
+        visibility: hidden;
+        pointer-events: none;
       }
       .authored {
         padding: 0 24px 24px;
@@ -418,19 +355,7 @@
     </style>
   </head>
   <body>
-    <aside id="trip">
-      <header id="trip-head">
-        <h1 id="title"></h1>
-        <div id="subtitle"></div>
-        <div class="chips" id="countries"></div>
-        <div class="key">
-          <span class="badge ai">✨ AI option · + to add</span>
-          <span class="badge booked">🎟️ Booked</span>
-          <span class="badge to-book">📝 To book</span>
-          <span class="badge replace">🔁 Instead of</span>
-          <span class="badge choice">🔀 Pick one</span>
-        </div>
-      </header>
+    <aside id="trip" aria-label="Trip timeline">
       <div id="timeline"></div>
     </aside>
     <main id="map-panel">

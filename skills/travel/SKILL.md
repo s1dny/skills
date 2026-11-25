@@ -26,7 +26,7 @@ When the user brings a plan (spreadsheet, doc, notes):
 1. **Import it as planned.** Each row becomes a day; transport, stays and activities become items. Read booking state from the source (for example cell fills against a key) into `booking: "booked" | "to book"`. Keep the user's wording.
 2. **Ask before researching**, in one round: who is travelling (ages, fitness), interests to lean towards, pace, budget, and how bold to be: swap activities only, or also move nights and unbooked transport. Note anything obvious as an assumption instead of asking.
 3. **Research every day** with `places search` and `places nearby` around that day's base. Check opening days and seasonal closures for the actual dates.
-4. **Offer options; don't decide.** Give each full day about 6–10 AI options, one place per card. Mark alternatives to unbooked items with `replaces`, and options where only one can happen with a shared `choice` label. The user picks with the + button; nothing changes the plan until then. Never touch booked items. Flag real problems in the plan (tight connections, wrong airports, closures) as options too.
+4. **Offer options; don't decide.** Give each full day about 6–10 AI options, one place per card. Give mutually exclusive options a shared `choice` label, including the original activity when it is one of the choices. The user picks with the + button; nothing changes the plan until then. Never touch booked items. Flag real problems in the plan (tight connections, wrong airports, closures) as options too.
 
 Report prices with the date they were fetched; they change daily. Commands exit non-zero on HTTP/RPC failures: those are errors, not empty results.
 

@@ -1,6 +1,5 @@
 {
   "title": "Phuket & Langkawi",
-  "subtitle": "2 adults",
   "days": [
     {
       "date": "2026-12-01",
@@ -57,9 +56,10 @@
       "country": "TH",
       "items": [
         {
-          "id": "big-buddha",
           "kind": "sight",
           "name": "Big Buddha",
+          "choice": "Afternoon",
+          "detail": "Hilltop views over southern Phuket.",
           "places": [
             {
               "name": "Phuket Big Buddha",
@@ -73,7 +73,7 @@
           "kind": "market",
           "name": "Old Phuket Town",
           "suggest": true,
-          "replaces": "big-buddha",
+          "choice": "Afternoon",
           "why": "Sino-Portuguese shophouses, cafes and the Sunday walking market fill a whole afternoon.",
           "places": [
             { "name": "Old Phuket Town", "placeId": "ChIJyXu3hvoxUDAR86GPJxPu9G8", "lat": 7.8858652, "lng": 98.3876197 }
@@ -105,6 +105,7 @@
       "date": "2026-12-03",
       "place": "Langkawi",
       "country": "MY",
+      "locations": [{ "name": "Phuket", "country": "TH" }, { "name": "Langkawi", "country": "MY" }],
       "items": [
         {
           "kind": "flight",
@@ -128,6 +129,7 @@
         {
           "kind": "beach",
           "name": "Pantai Cenang",
+          "detail": "Beach time after arriving in Langkawi.",
           "places": [
             { "name": "Pantai Cenang", "placeId": "ChIJG4L3oguISzARA2GH9QhW8MM", "lat": 6.2955916, "lng": 99.7228132 }
           ]
